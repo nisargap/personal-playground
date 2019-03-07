@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import netlifyIdentity from 'netlify-identity-widget';
+import { loginUser, logoutUser } from './lib/identityActions/';
 
 class App extends Component {
+  componentDidMount() {
+    const user = localStorage.getItem("currentOpenUser");
+    if (user) {
+      this.setState({user: JSON.parse(user)});
+    } else {
+      console.log("Logging in user");
+      loginUser();
+    }
+    netlifyIdentity.on("login", (user: any) => this.setState({user}, loginUser));
+    netlifyIdentity.on("logout", (_user: any) => this.setState({user: null}, logoutUser));
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <h1>Personal Playground</h1>
+        <button onClick={() => netlifyIdentity.open()}>
+          Login
+        </button>
       </div>
     );
   }
