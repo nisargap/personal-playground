@@ -21,6 +21,9 @@ class App extends Component {
         <button onClick={() => netlifyIdentity.open()}>
           Login
         </button>
+        <button onClick={() => logoutUser()}>
+          Logout
+        </button>
       </div>
     );
   }
